@@ -1,17 +1,3 @@
-/**
- * TDD
- *  1.
- *  2.
- *  3.
- *  4.
- *
- * */
-
-/**
- * todo
- *
- * */
-
 class Money {
   protected amount = 1;
   constructor(amount?: number) {
@@ -26,20 +12,25 @@ class Money {
   getAmount(): number {
     return this.amount;
   }
-  multiply(multiplier: number): void {
+  times(multiplier: number): void {
     this.amount *= multiplier;
   }
 }
 
 class Dollar extends Money {
   public equals(dollar: Money): boolean {
-    return this.amount === dollar.getAmount() && typeof this === typeof dollar;
+    return (
+      this.amount === dollar.getAmount() && this instanceof dollar.constructor
+    );
   }
 }
 
 class Franc extends Money {
-  public equals(franc: Franc): boolean {
-    return this.amount === franc.amount && typeof this === typeof franc;
+  public equals(franc: any): boolean {
+    return (
+      this.amount === (franc as Money).getAmount() &&
+      this.constructor === franc.constructor
+    );
   }
 }
 
@@ -60,17 +51,17 @@ describe('dollar test', () => {
     });
   });
   // ✔️ d
-  context("when execute dollar(5)'s multiply(2) method", () => {
+  context("when execute dollar(5)'s times(2) method", () => {
     it('should return 10', () => {
       const dollar = new Dollar(5);
-      dollar.multiply(2);
+      dollar.times(2);
       expect(dollar.getAmount()).toBe(10);
     });
   });
-  context("when execute franc(5)'s multiply(2) method", () => {
+  context("when execute franc(5)'s times(2) method", () => {
     it('should return 10', () => {
       const franc = new Franc(5);
-      franc.multiply(2);
+      franc.times(2);
       expect(franc.getAmount()).toBe(10);
     });
   });
@@ -81,7 +72,7 @@ describe('dollar test', () => {
   });
   context('when execute dollar(5) compare with franc(5)', () => {
     it('should return true', () => {
-      expect(Money.dollar(5).equals(Money.franc(5))).toBe(true);
+      expect(Money.dollar(5).equals(Money.franc(5))).toBe(false);
     });
   });
   context('when execute franc(5) compare with dollar(6)', () => {
